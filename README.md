@@ -1,1 +1,1 @@
-ktane-cheepCheckout
+#[ModKit Wiki](../../wiki)
