@@ -14,7 +14,10 @@ MonoBehaviour:
   id: cheepCheckout
   title: Cheep Checkout
   author: Blananas2
-  description: something
+  description: "All your bird and water fowl needs, all in one place!\r\n\nModule
+    ID: cheepCheckout\nCreated by EpicToast & Blananas2\n\nThe manual can be found
+    here: https://ktane.timwi.de/HTML/Cheap%20Checkout.html\n\nInspired by Cheap Checkout
+    by samfun123, which can be found here: http://steamcommunity.com/sharedfiles/filedetails/?id=844093428"
   version: 1.0
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 66359e4ffbf8cc44f8dd567f54fa2749, type: 3}
