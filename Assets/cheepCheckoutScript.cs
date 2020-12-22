@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using KModkit;
 
@@ -35,6 +36,7 @@ public class cheepCheckoutScript : MonoBehaviour
     bool entering = false;
     bool hasUnicornBird = false;
     bool unicorn = false;
+    bool waiting = false;
 
     //soundEffect = Audio.PlaySoundAtTransformWithRef("scream", transform);
 
@@ -66,7 +68,7 @@ public class cheepCheckoutScript : MonoBehaviour
         birdPrice = birdPrices[numberList[0]] + birdPrices[numberList[1]] + birdPrices[numberList[2]] + birdPrices[numberList[3]] + birdPrices[numberList[4]];
         Debug.Log(birdNames[numberList[0]] + " + " + birdNames[numberList[1]] + " + " + birdNames[numberList[2]] + " + " + birdNames[numberList[3]] + " + " + birdNames[numberList[4]] + " = " + birdPrice);
 
-        for (int k = 0; k <= 5; k++)
+        for (int k = 0; k < 5; k++)
         {
             Debug.LogFormat("[Cheep Checkout #{0}] Bird {1}: {2}, {3}, {4} ({5}, costs ${6})", moduleId, k + 1, pitchNames[birdPitches[numberList[k] * 3]], pitchNames[birdPitches[numberList[k] * 3 + 1]], pitchNames[birdPitches[numberList[k] * 3 + 2]], birdNames[numberList[k]], birdPrices[numberList[k]]);
         }
@@ -240,8 +242,10 @@ public class cheepCheckoutScript : MonoBehaviour
                         else
                         {
                             Debug.LogFormat("[Cheep Checkout #{0}] Customer slapped successfully.", moduleId);
-                            Audio.PlaySoundAtTransform("crow", transform);
-                            StartCoroutine(OneSecond());
+                            if (!waiting) {
+                                Audio.PlaySoundAtTransform("crow", transform);
+                                StartCoroutine(OneSecond());
+                            }
                         }
                     }
                     else
@@ -329,6 +333,7 @@ public class cheepCheckoutScript : MonoBehaviour
 
     IEnumerator OneSecond()
     {
+        waiting = true;
         Audio.PlaySoundAtTransform("robin", transform);
         for (int i = 0; i < 2; i++)
         {
@@ -354,6 +359,7 @@ public class cheepCheckoutScript : MonoBehaviour
         {
             validPrice = true;
         }
+        waiting = false;
     }
 
     IEnumerator RedText ()
@@ -397,5 +403,277 @@ public class cheepCheckoutScript : MonoBehaviour
         MainTexts[5].text = "R";
         MainTexts[6].text = "N";
         MainTexts[7].text = "<3";
+    }
+
+    //twitch plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} birds [Cycles through all the birds] | !{0} bird <#> [Goes to the specified bird] | !{0} press <button> [Presses the specified button] | !{0} mash [Mashes the submit button] | Valid buttons are submit, clear, and 1-8 representing the value buttons in reading order";
+    #pragma warning restore 414
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*mash\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) || Regex.IsMatch(command, @"^\s*slapfest\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            for(int i = 0; i < 15; i++)
+            {
+                OtherButtons[4].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            if (moduleSolved)
+                yield return "solve";
+            yield break;
+        }
+        if (Regex.IsMatch(command, @"^\s*slap\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) || Regex.IsMatch(command, @"^\s*submit\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            OtherButtons[4].OnInteract();
+            if (moduleSolved)
+                yield return "solve";
+            yield break;
+        }
+        if (Regex.IsMatch(command, @"^\s*birds\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            while(selectedBird != 0)
+            {
+                OtherButtons[1].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            yield return new WaitForSeconds(0.75f);
+            OtherButtons[0].OnInteract();
+            yield return new WaitForSeconds(3.0f);
+            for (int i = 0; i < 4; i++)
+            {
+                yield return "trycancel Bird cycling cancelled due to a cancel request";
+                OtherButtons[2].OnInteract();
+                yield return new WaitForSeconds(0.75f);
+                OtherButtons[0].OnInteract();
+                yield return new WaitForSeconds(3.0f);
+            }
+            while (selectedBird != 0)
+            {
+                OtherButtons[1].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            yield break;
+        }
+        string[] parameters = command.Split(' ');
+        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (parameters.Length == 2)
+            {
+                if (Regex.IsMatch(parameters[1], @"^\s*submit\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    OtherButtons[4].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*clear\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    OtherButtons[3].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*1\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[0].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*2\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[1].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*3\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[2].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*4\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[3].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*5\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[4].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*6\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[5].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*7\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[6].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*8\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    MainButtons[7].OnInteract();
+                }
+            }
+            yield break;
+        }
+        if (Regex.IsMatch(parameters[0], @"^\s*bird\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (parameters.Length == 2)
+            {
+                if (Regex.IsMatch(parameters[1], @"^\s*1\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    int start = selectedBird;
+                    for (int i = start; i > 0; i--)
+                    {
+                        OtherButtons[1].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    yield return new WaitForSeconds(0.75f);
+                    OtherButtons[0].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*2\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    int start = selectedBird;
+                    if (start < 1)
+                    {
+                        OtherButtons[2].OnInteract();
+                    }
+                    else if (start > 1)
+                    {
+                        for (int i = start; i > 1; i--)
+                        {
+                            OtherButtons[1].OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                    }
+                    yield return new WaitForSeconds(0.75f);
+                    OtherButtons[0].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*3\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    int start = selectedBird;
+                    if (start < 2)
+                    {
+                        for (int i = start; i < 2; i++)
+                        {
+                            OtherButtons[2].OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                    }
+                    else if (start > 2)
+                    {
+                        for (int i = start; i > 2; i--)
+                        {
+                            OtherButtons[1].OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                    }
+                    yield return new WaitForSeconds(0.75f);
+                    OtherButtons[0].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*4\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    int start = selectedBird;
+                    if (start > 3)
+                    {
+                        OtherButtons[1].OnInteract();
+                    }
+                    else if (start < 3)
+                    {
+                        for (int i = start; i < 3; i++)
+                        {
+                            OtherButtons[2].OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                    }
+                    yield return new WaitForSeconds(0.75f);
+                    OtherButtons[0].OnInteract();
+                }
+                else if (Regex.IsMatch(parameters[1], @"^\s*5\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                {
+                    yield return null;
+                    int start = selectedBird;
+                    for (int i = start; i < 4; i++)
+                    {
+                        OtherButtons[2].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    yield return new WaitForSeconds(0.75f);
+                    OtherButtons[0].OnInteract();
+                }
+            }
+            yield break;
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (unicorn)
+        {
+            yield return ProcessTwitchCommand("mash");
+            yield break;
+        }
+        yield return ProcessTwitchCommand("press clear");
+        while (!validPrice)
+        {
+            yield return ProcessTwitchCommand("slap");
+            while (waiting) yield return true;
+        }
+        double totalleft = answerPrice;
+        while (totalleft > 0.01)
+        {
+            if (totalleft >= 25)
+            {
+                MainButtons[mainNumbers.IndexOf("25")].OnInteract();
+                totalleft -= 25;
+            }
+            else if (totalleft >= 10)
+            {
+                MainButtons[mainNumbers.IndexOf("10")].OnInteract();
+                totalleft -= 10;
+            }
+            else if (totalleft >= 5)
+            {
+                MainButtons[mainNumbers.IndexOf(" 5 ")].OnInteract();
+                totalleft -= 5;
+            }
+            else if (totalleft >= 1)
+            {
+                MainButtons[mainNumbers.IndexOf(" 1 ")].OnInteract();
+                totalleft -= 1;
+            }
+            else if (totalleft >= .25)
+            {
+                MainButtons[mainNumbers.IndexOf(".25")].OnInteract();
+                totalleft -= .25;
+            }
+            else if (totalleft >= .1)
+            {
+                MainButtons[mainNumbers.IndexOf(".10")].OnInteract();
+                totalleft -= .1;
+            }
+            else if (totalleft >= .05)
+            {
+                MainButtons[mainNumbers.IndexOf(".05")].OnInteract();
+                totalleft -= .05;
+            }
+            else if (totalleft >= .01)
+            {
+                MainButtons[mainNumbers.IndexOf(".01")].OnInteract();
+                totalleft -= .01;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        //Here in case button calculations mess up
+        if(currentPrice != answerPrice)
+        {
+            currentPrice = answerPrice;
+            OtherTexts[0].text = "$" + answerPrice;
+        }
+        yield return new WaitForSeconds(0.1f);
+        OtherButtons[4].OnInteract();
     }
 }
