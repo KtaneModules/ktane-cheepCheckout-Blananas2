@@ -45,9 +45,20 @@ public class cheepCheckoutScript : MonoBehaviour
     int moduleId;
     private bool moduleSolved;
 
+    private CheepCheckoutSettings Settings = new CheepCheckoutSettings();
+    bool RandomizeButtons;
+
     void Awake()
     {
         moduleId = moduleIdCounter++;
+
+        ModConfig<CheepCheckoutSettings> modConfig = new ModConfig<CheepCheckoutSettings>("CheepCheckoutSettings");
+       //Read from the settings file, or create one if one doesn't exist
+       Settings = modConfig.Settings;
+       //Update the settings file incase there was an error during read
+       modConfig.Settings = Settings;
+       Debug.LogFormat("<Cheep Checkout #{0}> RandomizeButtons: {1}", moduleId, Settings.RandomizeButtons);
+
         foreach (KMSelectable mButton in MainButtons)
         {
             KMSelectable pressedMButton = mButton;
@@ -173,15 +184,17 @@ public class cheepCheckoutScript : MonoBehaviour
                 OtherTexts[0].text = "$" + currentPrice.ToString().PadRight((Math.Floor(currentPrice).ToString() + ".").Length + 2, '0');
             }
 
-            mainNumbers.Shuffle();
-            MainTexts[0].text = mainNumbers[0];
-            MainTexts[1].text = mainNumbers[1];
-            MainTexts[2].text = mainNumbers[2];
-            MainTexts[3].text = mainNumbers[3];
-            MainTexts[4].text = mainNumbers[4];
-            MainTexts[5].text = mainNumbers[5];
-            MainTexts[6].text = mainNumbers[6];
-            MainTexts[7].text = mainNumbers[7];
+            if (Settings.RandomizeButtons) {
+                mainNumbers.Shuffle();
+                MainTexts[0].text = mainNumbers[0];
+                MainTexts[1].text = mainNumbers[1];
+                MainTexts[2].text = mainNumbers[2];
+                MainTexts[3].text = mainNumbers[3];
+                MainTexts[4].text = mainNumbers[4];
+                MainTexts[5].text = mainNumbers[5];
+                MainTexts[6].text = mainNumbers[6];
+                MainTexts[7].text = mainNumbers[7];
+            }
         }
     }
 
@@ -676,4 +689,25 @@ public class cheepCheckoutScript : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         OtherButtons[4].OnInteract();
     }
+
+    class CheepCheckoutSettings
+    {
+        public bool RandomizeButtons = true;
+    }
+
+    static Dictionary<string, object>[] TweaksEditorSettings = new Dictionary<string, object>[]
+    {
+        new Dictionary<string, object>
+        {
+            { "Filename", "CheepCheckoutSettings.json" },
+            { "Name", "Cheep Checkout Settings" },
+            { "Listing", new List<Dictionary<string, object>>{
+                new Dictionary<string, object>
+                {
+                    { "Key", "RandomizeButtons" },
+                    { "Text", "Determines whether or not the buttons get randomized." }
+                },
+            } }
+        }
+    };
 }
