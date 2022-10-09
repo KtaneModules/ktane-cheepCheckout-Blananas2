@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 114139553842080666}
   - component: {fileID: 114508299441665104}
   m_Layer: 0
-  m_Name: Template
+  m_Name: Cheep Checkout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3198,6 +3198,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
   Children:
+  - {fileID: 114589202426127046}
+  - {fileID: 114749492218425928}
+  - {fileID: 0}
+  - {fileID: 114251780700826200}
   - {fileID: 114255038657277636}
   - {fileID: 114468768319314314}
   - {fileID: 114842194120880824}
@@ -3207,12 +3211,11 @@ MonoBehaviour:
   - {fileID: 114331596847254118}
   - {fileID: 114509932006610402}
   - {fileID: 114563745015282102}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 114420163499540860}
-  - {fileID: 114589202426127046}
-  - {fileID: 114251780700826200}
-  - {fileID: 114749492218425928}
   IsPassThrough: 0
-  ChildRowLength: 0
+  ChildRowLength: 4
   Highlight: {fileID: 114570430299588062}
   SelectableColliders: []
   DefaultSelectableIndex: 0

@@ -77,7 +77,7 @@ public class cheepCheckoutScript : MonoBehaviour
     {
         numberList.Shuffle();
         birdPrice = birdPrices[numberList[0]] + birdPrices[numberList[1]] + birdPrices[numberList[2]] + birdPrices[numberList[3]] + birdPrices[numberList[4]];
-        Debug.Log(birdNames[numberList[0]] + " + " + birdNames[numberList[1]] + " + " + birdNames[numberList[2]] + " + " + birdNames[numberList[3]] + " + " + birdNames[numberList[4]] + " = " + birdPrice);
+        Debug.Log("<Cheep Checkout>" + birdNames[numberList[0]] + " + " + birdNames[numberList[1]] + " + " + birdNames[numberList[2]] + " + " + birdNames[numberList[3]] + " + " + birdNames[numberList[4]] + " = " + birdPrice);
 
         for (int k = 0; k < 5; k++)
         {
@@ -87,7 +87,7 @@ public class cheepCheckoutScript : MonoBehaviour
         if (numberList[0] == 26 || numberList[1] == 26 || numberList[2] == 26 || numberList[3] == 26 || numberList[4] == 26)
         {
             hasUnicornBird = true;
-            Debug.Log("UNICORN BIRD DETECTED");
+            Debug.Log("<Cheep Checkout>" + "UNICORN BIRD DETECTED");
         }
 
         customerPrice = UnityEngine.Random.Range(5, 20);
@@ -99,7 +99,7 @@ public class cheepCheckoutScript : MonoBehaviour
         if (Bomb.IsIndicatorOn(Indicator.BOB) && hasUnicornBird)
         {
             unicorn = true;
-            Debug.Log("UNICORN IN EFFECT");
+            Debug.Log("<Cheep Checkout>" + "UNICORN IN EFFECT");
             Debug.LogFormat("[Cheep Checkout #{0}] Unicorn rule applies, please repeatedly slap the customer.", moduleId);
         }
         else
@@ -173,7 +173,7 @@ public class cheepCheckoutScript : MonoBehaviour
             }
 
             OtherTexts[0].color = Colors[2];
-            Debug.Log(currentPrice);
+            Debug.Log("<Cheep Checkout>" + currentPrice);
 
             if (currentPrice % 1 == 0)
             {
@@ -217,7 +217,7 @@ public class cheepCheckoutScript : MonoBehaviour
                 {
                     Audio.PlaySoundAtTransform("african-grey-parrot", transform);
                 }
-                Debug.Log("Selected Bird: " + selectedBird);
+                Debug.Log("<Cheep Checkout>" + "Selected Bird: " + selectedBird);
             }
             else if (pressedOButton == OtherButtons[2]) //RIGHT
             {
@@ -229,7 +229,7 @@ public class cheepCheckoutScript : MonoBehaviour
                 {
                     Audio.PlaySoundAtTransform("african-grey-parrot", transform);
                 }
-                Debug.Log("Selected Bird: " + selectedBird);
+                Debug.Log("<Cheep Checkout>" + "Selected Bird: " + selectedBird);
             }
             else if (pressedOButton == OtherButtons[3]) //CLEAR
             {
@@ -263,7 +263,7 @@ public class cheepCheckoutScript : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(currentPrice + " | " + answerPrice);
+                        Debug.Log("<Cheep Checkout>" + currentPrice + " | " + answerPrice);
                         if (currentPrice.ToString("N") == answerPrice.ToString("N"))
                         {
                             Debug.LogFormat("[Cheep Checkout #{0}] Correct amount of change given, module solved.", moduleId);
@@ -297,7 +297,7 @@ public class cheepCheckoutScript : MonoBehaviour
 
     IEnumerator PlaySounds()
     {
-        Debug.Log(birdPitches[numberList[selectedBird] * 3]);
+        Debug.Log("<Cheep Checkout>" + birdPitches[numberList[selectedBird] * 3]);
         if (birdPitches[numberList[selectedBird] * 3] == 0)
         {
             Audio.PlaySoundAtTransform("low1", transform);
@@ -313,7 +313,7 @@ public class cheepCheckoutScript : MonoBehaviour
 
         yield return new WaitForSeconds(0.68f);
 
-        Debug.Log(birdPitches[numberList[selectedBird] * 3 + 1]);
+        Debug.Log("<Cheep Checkout>" + birdPitches[numberList[selectedBird] * 3 + 1]);
         if (birdPitches[numberList[selectedBird] * 3 + 1] == 0)
         {
             Audio.PlaySoundAtTransform("low2", transform);
@@ -329,7 +329,7 @@ public class cheepCheckoutScript : MonoBehaviour
 
         yield return new WaitForSeconds(0.68f);
 
-        Debug.Log(birdPitches[numberList[selectedBird] * 3 + 2]);
+        Debug.Log("<Cheep Checkout>" + birdPitches[numberList[selectedBird] * 3 + 2]);
         if (birdPitches[numberList[selectedBird] * 3 + 2] == 0)
         {
             Audio.PlaySoundAtTransform("low3", transform);
@@ -363,7 +363,7 @@ public class cheepCheckoutScript : MonoBehaviour
         OtherTexts[0].text = "$" + customerPrice + ".00";
         Debug.LogFormat("[Cheep Checkout #{0}] New price is ${1}.", moduleId, customerPrice);
         answerPrice = customerPrice - birdPrice;
-        Debug.Log(answerPrice);
+        Debug.Log("<Cheep Checkout>" + answerPrice);
         if (answerPrice <= 0)
         {
             validPrice = false;
