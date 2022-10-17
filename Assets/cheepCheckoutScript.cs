@@ -19,19 +19,19 @@ public class cheepCheckoutScript : MonoBehaviour
     public Color[] Colors; //white, red, yellow, green
 
     //KMAudio.KMAudioRef soundEffect;
-    public List<string> birdNames = new List<string> { "Auklet", "Bluebird", "Chickadee", "Dove", "Egret", "Finch", "Godwit", "Hummingbird", "Ibis", "Jay", "Kinglet", "Loon", "Magpie", "Nuthatch", "Oriole", "Pipit", "Quail", "Raven", "Shrike", "Thrush", "Umbrellabird", "Vireo", "Warbler", "Xantus’s Hummingbird", "Yellowlegs", "Zigzag Heron", "[Unicorn Bastard]" };
-    public List<double> birdPrices = new List<double> { 3.59, 6.33, 1.99, 2.50, 9.01, 6.90, 5.27, 9.12, 4.10, 8.93, 7.28, 1.23, 3.77, 0.99, 3.14, 1.41, 9.04, 8.00, 4.20, 2.60, 0.01, 9.67, 3.69, 5.51, 2.01, 7.53, 0.00 };
-    public List<int> birdPitches = new List<int> { 1, 1, 0, 2, 0, 1, 1, 1, 2, 1, 0, 2, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 2, 0, 0, 0, 2, 0, 0, 2, 1, 1, 2, 1, 2, 1, 2, 0, 0, 2, 1, 0, 1, 0, 2, 2, 1, 2, 2, 2, 1, 1, 2, 1, 0, 2, 2, 1, 2, 0, 2, 1, 0, 0, 1, 2, 0, 0, 1, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0 };
-    public List<int> numberList = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
-    public List<string> mainNumbers = new List<string> { ".01", ".05", ".10", ".25", " 1 ", " 5 ", "10", "25" };
-    public List<string> pitchNames = new List<string> { "Low", "Medium", "High" };
+    private List<string> birdNames = new List<string> { "Auklet", "Bluebird", "Chickadee", "Dove", "Egret", "Finch", "Godwit", "Hummingbird", "Ibis", "Jay", "Kinglet", "Loon", "Magpie", "Nuthatch", "Oriole", "Pipit", "Quail", "Raven", "Shrike", "Thrush", "Umbrellabird", "Vireo", "Warbler", "Xantus’s Hummingbird", "Yellowlegs", "Zigzag Heron", "[Unicorn Bastard]" };
+    private List<int> birdPrices = new List<int> { 359, 633, 199, 250, 901, 690, 527, 912, 410, 893, 728, 123, 377, 99, 314, 141, 904, 800, 420, 260, 1, 967, 369, 551, 201, 753, 0 };
+    private List<int> birdPitches = new List<int> { 1, 1, 0, 2, 0, 1, 1, 1, 2, 1, 0, 2, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 2, 0, 0, 0, 2, 0, 0, 2, 1, 1, 2, 1, 2, 1, 2, 0, 0, 2, 1, 0, 1, 0, 2, 2, 1, 2, 2, 2, 1, 1, 2, 1, 0, 2, 2, 1, 2, 0, 2, 1, 0, 0, 1, 2, 0, 0, 1, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0 };
+    private List<int> numberList = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
+    private List<string> mainNumbers = new List<string> { ".01", ".05", ".10", ".25", " 1 ", " 5 ", "10", "25" };
+    private List<string> pitchNames = new List<string> { "Low", "Medium", "High" };
     int selectedBird = 0;
     int pressedButton = 0;
     int unicornPressCount = 0;
-    double birdPrice = 0;
-    double currentPrice = 0;
-    double customerPrice = 0;
-    double answerPrice = 0;
+    int birdPrice = 0;
+    int currentPrice = 0;
+    int customerPrice = 0;
+    int answerPrice = 0;
     bool validPrice = true;
     bool entering = false;
     bool hasUnicornBird = false;
@@ -81,7 +81,7 @@ public class cheepCheckoutScript : MonoBehaviour
 
         for (int k = 0; k < 5; k++)
         {
-            Debug.LogFormat("[Cheep Checkout #{0}] Bird {1}: {2}, {3}, {4} ({5}, costs ${6})", moduleId, k + 1, pitchNames[birdPitches[numberList[k] * 3]], pitchNames[birdPitches[numberList[k] * 3 + 1]], pitchNames[birdPitches[numberList[k] * 3 + 2]], birdNames[numberList[k]], birdPrices[numberList[k]]);
+            Debug.LogFormat("[Cheep Checkout #{0}] Bird {1}: {2}, {3}, {4} ({5}, costs ${6})", moduleId, k + 1, pitchNames[birdPitches[numberList[k] * 3]], pitchNames[birdPitches[numberList[k] * 3 + 1]], pitchNames[birdPitches[numberList[k] * 3 + 2]], birdNames[numberList[k]], dollar(birdPrices[numberList[k]]));
         }
 
         if (numberList[0] == 26 || numberList[1] == 26 || numberList[2] == 26 || numberList[3] == 26 || numberList[4] == 26)
@@ -90,11 +90,10 @@ public class cheepCheckoutScript : MonoBehaviour
             Debug.Log("<Cheep Checkout>" + "UNICORN BIRD DETECTED");
         }
 
-        customerPrice = UnityEngine.Random.Range(5, 20);
-        OtherTexts[0].text = "$" + customerPrice + ".00";
+        customerPrice = UnityEngine.Random.Range(5, 20) * 100;
+        OtherTexts[0].text = "$" + dollar(customerPrice);
 
-        answerPrice = Math.Round(customerPrice - birdPrice, 2);
-
+        answerPrice = customerPrice - birdPrice;
 
         if (Bomb.IsIndicatorOn(Indicator.BOB) && hasUnicornBird)
         {
@@ -104,8 +103,8 @@ public class cheepCheckoutScript : MonoBehaviour
         }
         else
         {
-            Debug.LogFormat("[Cheep Checkout #{0}] All amounts total to ${1}.", moduleId, birdPrice);
-            Debug.LogFormat("[Cheep Checkout #{0}] Customer paid ${1}.", moduleId, customerPrice);
+            Debug.LogFormat("[Cheep Checkout #{0}] All amounts total to ${1}.", moduleId, dollar(birdPrice));
+            Debug.LogFormat("[Cheep Checkout #{0}] Customer paid ${1}.", moduleId, dollar(customerPrice));
             if (answerPrice <= 0)
             {
                 validPrice = false;
@@ -113,8 +112,16 @@ public class cheepCheckoutScript : MonoBehaviour
             }
             else
             {
-                Debug.LogFormat("[Cheep Checkout #{0}] Correct change is ${1}.", moduleId, answerPrice);
+                Debug.LogFormat("[Cheep Checkout #{0}] Correct change is ${1}.", moduleId, dollar(answerPrice));
             }
+        }
+    }
+
+    string dollar (int n) {
+        if (n % 100 < 10) {
+            return n/100 + ".0" + n%100;
+        } else {
+            return n/100 + "." + n%100;
         }
     }
 
@@ -133,56 +140,49 @@ public class cheepCheckoutScript : MonoBehaviour
             }
             if (MainTexts[pressedButton].text == ".01")
             {
-                currentPrice += 0.01;
+                currentPrice += 1;
                 Audio.PlaySoundAtTransform("dove", transform);
             }
             else if (MainTexts[pressedButton].text == ".05")
             {
-                currentPrice += 0.05;
+                currentPrice += 5;
                 Audio.PlaySoundAtTransform("dove", transform);
             }
             else if (MainTexts[pressedButton].text == ".10")
             {
-                currentPrice += 0.10;
+                currentPrice += 10;
                 Audio.PlaySoundAtTransform("dove", transform);
             }
             else if (MainTexts[pressedButton].text == ".25")
             {
-                currentPrice += 0.25;
+                currentPrice += 25;
                 Audio.PlaySoundAtTransform("dove", transform);
             }
             else if (MainTexts[pressedButton].text == " 1 ")
             {
-                currentPrice += 1;
+                currentPrice += 100;
                 Audio.PlaySoundAtTransform("falcon", transform);
             }
             else if (MainTexts[pressedButton].text == " 5 ")
             {
-                currentPrice += 5;
+                currentPrice += 500;
                 Audio.PlaySoundAtTransform("falcon", transform);
             }
             else if (MainTexts[pressedButton].text == "10")
             {
-                currentPrice += 10;
+                currentPrice += 1000;
                 Audio.PlaySoundAtTransform("falcon", transform);
             }
             else if (MainTexts[pressedButton].text == "25")
             {
-                currentPrice += 25;
+                currentPrice += 2500;
                 Audio.PlaySoundAtTransform("falcon", transform);
             }
 
             OtherTexts[0].color = Colors[2];
             Debug.Log("<Cheep Checkout>" + currentPrice);
 
-            if (currentPrice % 1 == 0)
-            {
-                OtherTexts[0].text = "$" + currentPrice + ".00";
-            }
-            else
-            {
-                OtherTexts[0].text = "$" + currentPrice.ToString().PadRight((Math.Floor(currentPrice).ToString() + ".").Length + 2, '0');
-            }
+            OtherTexts[0].text = "$" + dollar(currentPrice);
 
             if (Settings.RandomizeButtons) {
                 mainNumbers.Shuffle();
@@ -236,7 +236,7 @@ public class cheepCheckoutScript : MonoBehaviour
                 OtherTexts[0].color = Colors[0];
                 currentPrice = 0;
                 entering = false;
-                OtherTexts[0].text = "$" + customerPrice + ".00";
+                OtherTexts[0].text = "$" + dollar(customerPrice);
                 Audio.PlaySoundAtTransform("crow", transform);
             }
             else if (pressedOButton == OtherButtons[4]) //SUBMIT
@@ -264,7 +264,7 @@ public class cheepCheckoutScript : MonoBehaviour
                     else
                     {
                         Debug.Log("<Cheep Checkout>" + currentPrice + " | " + answerPrice);
-                        if (currentPrice.ToString("N") == answerPrice.ToString("N"))
+                        if (currentPrice == answerPrice)
                         {
                             Debug.LogFormat("[Cheep Checkout #{0}] Correct amount of change given, module solved.", moduleId);
                             moduleSolved = true;
@@ -272,7 +272,7 @@ public class cheepCheckoutScript : MonoBehaviour
                         }
                         else
                         {
-                            Debug.LogFormat("[Cheep Checkout #{0}] Incorrect amount of change given ({1}), module striked.", moduleId, currentPrice.ToString("N"));
+                            Debug.LogFormat("[Cheep Checkout #{0}] Incorrect amount of change given (${1}), module striked.", moduleId, dollar(currentPrice));
                             Audio.PlaySoundAtTransform("crow", transform);
                             GetComponent<KMBombModule>().HandleStrike();
                             StartCoroutine(RedText());
@@ -359,9 +359,9 @@ public class cheepCheckoutScript : MonoBehaviour
             OtherTexts[0].text = "ONE SECOND...";
             yield return new WaitForSeconds(0.375f);
         }
-        customerPrice += UnityEngine.Random.Range(5,20);
-        OtherTexts[0].text = "$" + customerPrice + ".00";
-        Debug.LogFormat("[Cheep Checkout #{0}] New price is ${1}.", moduleId, customerPrice);
+        customerPrice += UnityEngine.Random.Range(5,20) * 100;
+        OtherTexts[0].text = "$" + dollar(customerPrice);
+        Debug.LogFormat("[Cheep Checkout #{0}] New price is ${1}.", moduleId, dollar(customerPrice));
         answerPrice = customerPrice - birdPrice;
         Debug.Log("<Cheep Checkout>" + answerPrice);
         if (answerPrice <= 0)
@@ -382,7 +382,7 @@ public class cheepCheckoutScript : MonoBehaviour
         OtherTexts[0].color = Colors[0];
         currentPrice = 0;
         entering = false;
-        OtherTexts[0].text = "$" + customerPrice + ".00";
+        OtherTexts[0].text = "$" + dollar(customerPrice);
     }
 
     IEnumerator CorrectAnswer ()
@@ -405,6 +405,7 @@ public class cheepCheckoutScript : MonoBehaviour
     {
         Debug.LogFormat("[Cheep Checkout #{0}] The customer is now dead, module solved.", moduleId);
         OtherTexts[0].color = Colors[3];
+        OtherTexts[0].text = "*DEAD*";
         Audio.PlaySoundAtTransform("Rooster", transform);
         yield return new WaitForSeconds(1.645f);
         GetComponent<KMBombModule>().HandlePass();
@@ -635,57 +636,52 @@ public class cheepCheckoutScript : MonoBehaviour
             yield return ProcessTwitchCommand("slap");
             while (waiting) yield return true;
         }
-        double totalleft = answerPrice;
-        while (totalleft > 0.01)
+        int totalleft = answerPrice;
+        while (totalleft > 0)
         {
-            if (totalleft >= 25)
+            if (totalleft >= 2500)
             {
                 MainButtons[mainNumbers.IndexOf("25")].OnInteract();
+                totalleft -= 2500;
+            }
+            else if (totalleft >= 1000)
+            {
+                MainButtons[mainNumbers.IndexOf("10")].OnInteract();
+                totalleft -= 1000;
+            }
+            else if (totalleft >= 500)
+            {
+                MainButtons[mainNumbers.IndexOf(" 5 ")].OnInteract();
+                totalleft -= 500;
+            }
+            else if (totalleft >= 100)
+            {
+                MainButtons[mainNumbers.IndexOf(" 1 ")].OnInteract();
+                totalleft -= 100;
+            }
+            else if (totalleft >= 25)
+            {
+                MainButtons[mainNumbers.IndexOf(".25")].OnInteract();
                 totalleft -= 25;
             }
             else if (totalleft >= 10)
             {
-                MainButtons[mainNumbers.IndexOf("10")].OnInteract();
+                MainButtons[mainNumbers.IndexOf(".10")].OnInteract();
                 totalleft -= 10;
             }
             else if (totalleft >= 5)
             {
-                MainButtons[mainNumbers.IndexOf(" 5 ")].OnInteract();
+                MainButtons[mainNumbers.IndexOf(".05")].OnInteract();
                 totalleft -= 5;
             }
             else if (totalleft >= 1)
             {
-                MainButtons[mainNumbers.IndexOf(" 1 ")].OnInteract();
-                totalleft -= 1;
-            }
-            else if (totalleft >= .25)
-            {
-                MainButtons[mainNumbers.IndexOf(".25")].OnInteract();
-                totalleft -= .25;
-            }
-            else if (totalleft >= .1)
-            {
-                MainButtons[mainNumbers.IndexOf(".10")].OnInteract();
-                totalleft -= .1;
-            }
-            else if (totalleft >= .05)
-            {
-                MainButtons[mainNumbers.IndexOf(".05")].OnInteract();
-                totalleft -= .05;
-            }
-            else if (totalleft >= .01)
-            {
                 MainButtons[mainNumbers.IndexOf(".01")].OnInteract();
-                totalleft -= .01;
+                totalleft -= 1;
             }
             yield return new WaitForSeconds(0.1f);
         }
-        //Here in case button calculations mess up
-        if(currentPrice != answerPrice)
-        {
-            currentPrice = answerPrice;
-            OtherTexts[0].text = "$" + answerPrice;
-        }
+
         yield return new WaitForSeconds(0.1f);
         OtherButtons[4].OnInteract();
     }
